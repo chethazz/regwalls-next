@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@lucia-auth/adapter-prisma": "^4.0.1",
+    "@node-rs/argon2": "^2.0.2",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
