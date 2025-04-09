@@ -23,6 +23,7 @@ model User {
   avatarUrl    String?
   bio          String?
   sessions     Session[]
+  images       Image[]
 
   createdAt DateTime @default(now())
 
@@ -36,4 +37,17 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model Image {
+  id          String  @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  category    String?
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("images")
 }
