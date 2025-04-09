@@ -29,9 +29,9 @@ export default function LogInForm() {
 
     return (
         <Form {...form}>
-            <form 
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-3"
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-3"
             >
                 {error && <p className="text-center text-destructive">{error}</p>}
 
@@ -42,7 +42,11 @@ export default function LogInForm() {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="Username" {...field} className="border-none bg-secondary" />
+                                <Input
+                                    placeholder="Username"
+                                    {...field}
+                                    className="transition-colors border-none bg-secondary focus:bg-card"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -56,7 +60,12 @@ export default function LogInForm() {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input placeholder="Password" type="password" {...field} className="border-none bg-secondary" />
+                                <Input
+                                    placeholder="Password"
+                                    type="password"
+                                    {...field}
+                                    className="transition-colors border-none bg-secondary focus:bg-card"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

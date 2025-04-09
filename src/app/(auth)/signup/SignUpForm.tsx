@@ -44,7 +44,11 @@ export default function SignUpForm() {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="Username" {...field} className="border-none bg-secondary" />
+                                <Input
+                                    placeholder="Username"
+                                    {...field}
+                                    className="transition-colors border-none bg-secondary focus:bg-card"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -58,7 +62,12 @@ export default function SignUpForm() {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input type="email" placeholder="Email" {...field} className="border-none bg-secondary" />
+                                <Input
+                                    type="email"
+                                    placeholder="Email"
+                                    {...field}
+                                    className="transition-colors border-none bg-secondary focus:bg-card"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -72,7 +81,12 @@ export default function SignUpForm() {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input type="password" placeholder="Password" {...field} className="border-none bg-secondary" />
+                                <Input
+                                    type="password"
+                                    placeholder="Password"
+                                    {...field}
+                                    className="transition-colors border-none bg-secondary focus:bg-card"
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
