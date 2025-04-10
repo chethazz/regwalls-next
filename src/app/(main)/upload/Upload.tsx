@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MinusCircle, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -38,7 +38,6 @@ export default function Upload() {
             <ImageInputButton
                 onImageSelected={startUpload}
                 disabled={false}
-                removeImage={removeImage}
             />
             <Form {...form}>
                 <form className="space-y-3">
@@ -78,13 +77,11 @@ export default function Upload() {
 interface ImageInputButtonProps {
     onImageSelected: (file: File[]) => void;
     disabled: boolean;
-    removeImage: () => void;
 }
 
 function ImageInputButton({
     onImageSelected,
     disabled,
-    removeImage
 }: ImageInputButtonProps) {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,14 +102,6 @@ function ImageInputButton({
                 >
                     Choose image
                     <PlusCircle size={20} />
-                </Button>
-                <Button
-                    variant="secondary"
-                    className="transition-colors hover:bg-card hover:cursor-pointer"
-                    onClick={() => removeImage()}
-                >
-                    Remove image
-                    <MinusCircle size={20} />
                 </Button>
             </div>
             <input
