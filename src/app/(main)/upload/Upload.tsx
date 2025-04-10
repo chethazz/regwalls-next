@@ -1,11 +1,13 @@
 "use client";
 
+import useImageUpload from "@/app/hooks/useImageUpload";
 import { imageSchema, ImageValues } from "@/app/lib/validation";
+import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
+import { MinusCircle, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -22,9 +24,22 @@ export default function Upload() {
         }
     });
 
+    const {
+        startUpload,
+        images,
+        isUploading,
+        uploadProgress,
+        removeImage,
+        reset: resetImageUpload
+    } = useImageUpload();
+
     return (
         <div className="p-5 space-y-5">
-            <ImageInput />
+            <ImageInputButton
+                onImageSelected={startUpload}
+                disabled={false}
+                removeImage={removeImage}
+            />
             <Form {...form}>
                 <form className="space-y-3">
                     <FormField
@@ -60,33 +75,60 @@ export default function Upload() {
     );
 }
 
-function ImageInput() {
+interface ImageInputButtonProps {
+    onImageSelected: (file: File[]) => void;
+    disabled: boolean;
+    removeImage: () => void;
+}
+
+function ImageInputButton({
+    onImageSelected,
+    disabled,
+    removeImage
+}: ImageInputButtonProps) {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="w-full">
-            <input type="file"
+        <div className="w-full space-y-5">
+            <Image
+                src={backgroundImage}
+                alt="Preview"
+                className="max-h-[600px] object-cover rounded-2xl"
+            />
+            <div className="flex gap-3">
+                <Button
+                    variant="secondary"
+                    className="transition-colors hover:bg-card hover:cursor-pointer"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={disabled}
+                >
+                    Choose image
+                    <PlusCircle size={20} />
+                </Button>
+                <Button
+                    variant="secondary"
+                    className="transition-colors hover:bg-card hover:cursor-pointer"
+                    onClick={() => removeImage()}
+                >
+                    Remove image
+                    <MinusCircle size={20} />
+                </Button>
+            </div>
+            <input
+                type="file"
                 accept="image/*"
                 ref={fileInputRef}
                 className="hidden sr-only"
+                onChange={(e) => {
+                    const images = Array.from(e.target.files || []);
+
+                    if (images) {
+                        onImageSelected(images);
+                        e.target.value = "";
+                    }
+                }}
             />
-            <button
-                type="button"
-                onClick={() => { }}
-                className="relative block group"
-            >
-                <div className="w-full rounded-2xl overflow-hidden relative max-h-[700px]">
-                    <Image
-                        src={backgroundImage}
-                        alt="Image"
-                        className="object-cover"
-                    />
-                    <span className="absolute flex bg-primary/60 top-[50%] p-1 rounded-2xl left-[50%] items-center justify-center -translate-x-1/2 -translate-y-1/2">
-                        <PlusCircle className="text-secondary/60" size={56} />
-                    </span>
-                </div>
-            </button>
         </div>
     );
 }

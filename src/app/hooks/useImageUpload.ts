@@ -8,13 +8,15 @@ interface Image {
     isUploading: boolean;
 }
 
-export default function useMediaUpload() {
+export default function useImageUpload() {
     const [images, setImages] = useState<Image[]>([]);
 
     const [uploadProgress, setUploadProgress] = useState<number>();
 
     const { startUpload, isUploading } = useUploadThing("image", {
         onBeforeUploadBegin(files) {
+            
+            console.log("Images are this:")
             const renamedImages = files.map(file => {
                 const extension = file.name.split(".").pop();
                 return new File(
