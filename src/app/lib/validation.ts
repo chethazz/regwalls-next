@@ -18,3 +18,12 @@ export const logInSchema = z.object({
 });
 
 export type LogInValues = z.infer<typeof logInSchema>;
+
+export const imageSchema = z.object({
+    imageUrl: z.string().url("Invalid image URL"),
+    title: z.string().trim().min(1, "Title is required"),
+    description: z.string().trim(),
+    category: z.string().trim()
+});
+
+export type ImageValues = z.infer<typeof imageSchema>;
