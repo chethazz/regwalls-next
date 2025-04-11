@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, PlusCircle } from "lucide-react";
+import { LoaderCircle, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -36,12 +36,13 @@ export default function Upload() {
         <div className="p-5 space-y-5">
             <UploadedImagePreview
                 images={images}
+                removeImage={removeImage}
+                isUploading={isUploading}
+                uploadProgress={uploadProgress || 0}
             />
             <ImageInputButton
                 onImageSelected={startUpload}
                 disabled={false}
-                isUploading={isUploading}
-                uploadProgress={uploadProgress || 0}
             />
             <Form {...form}>
                 <form className="space-y-3">
@@ -81,15 +82,11 @@ export default function Upload() {
 interface ImageInputButtonProps {
     onImageSelected: (file: File[]) => void;
     disabled: boolean;
-    isUploading: boolean;
-    uploadProgress: number;
 }
 
 function ImageInputButton({
     onImageSelected,
     disabled,
-    isUploading,
-    uploadProgress
 }: ImageInputButtonProps) {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -106,14 +103,6 @@ function ImageInputButton({
                     Choose image
                     <PlusCircle size={20} />
                 </Button>
-                {isUploading && (
-                    <>
-                        <LoaderCircle className="size-5 animate-spin" />
-                        <span className="text-sm">
-                            {uploadProgress} %
-                        </span>
-                    </>
-                )}
             </div>
             <input
                 type="file"
@@ -135,10 +124,16 @@ function ImageInputButton({
 
 interface UploadedImagePreviewProps {
     images: ImageType[];
+    removeImage: () => void;
+    isUploading: boolean;
+    uploadProgress: number;
 }
 
 function UploadedImagePreview({
-    images
+    images,
+    removeImage,
+    isUploading,
+    uploadProgress
 }: UploadedImagePreviewProps) {
 
     const image = images?.length
@@ -151,13 +146,32 @@ function UploadedImagePreview({
         console.log("SRCCCC", src);
 
         return (
-            <Image
-                src={src}
-                alt="Preview"
-                width={100}
-                height={100}
-                className="max-h-[600px] object-cover rounded-2xl size-fit"
-            />
+            <div className="relative size-fit">
+                <div>
+                    <Image
+                        src={src}
+                        alt="Preview"
+                        width={100}
+                        height={100}
+                        className="max-h-[600px] object-cover rounded-2xl size-fit"
+                    />
+                    {isUploading && (
+                        <div className="absolute flex p-1 rounded-full bottom-1 left-1 bg-secondary/60">
+                            <LoaderCircle className="size-5 animate-spin" />
+                            <span className="text-sm">
+                                {uploadProgress} %
+                            </span>
+                        </div>
+                    )}
+                </div>
+                <button
+                    onClick={removeImage}
+                    className="absolute p-1 rounded-full cursor-pointer top-2 right-2 bg-secondary/60"
+                    title="Remove image"
+                >
+                    <X size={20} />
+                </button>
+            </div>
         );
     }
 }
