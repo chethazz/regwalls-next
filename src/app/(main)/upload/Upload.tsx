@@ -1,17 +1,16 @@
 "use client";
 
-import useImageUpload from "@/app/hooks/useImageUpload";
+import useImageUpload, { Image as ImageType } from "@/app/hooks/useImageUpload";
 import { imageSchema, ImageValues } from "@/app/lib/validation";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
+import { LoaderCircle, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import backgroundImage from "../../../../public/background-light.jpg";
 
 export default function Upload() {
 
@@ -35,9 +34,14 @@ export default function Upload() {
 
     return (
         <div className="p-5 space-y-5">
+            <UploadedImagePreview
+                images={images}
+            />
             <ImageInputButton
                 onImageSelected={startUpload}
                 disabled={false}
+                isUploading={isUploading}
+                uploadProgress={uploadProgress || 0}
             />
             <Form {...form}>
                 <form className="space-y-3">
@@ -77,23 +81,22 @@ export default function Upload() {
 interface ImageInputButtonProps {
     onImageSelected: (file: File[]) => void;
     disabled: boolean;
+    isUploading: boolean;
+    uploadProgress: number;
 }
 
 function ImageInputButton({
     onImageSelected,
     disabled,
+    isUploading,
+    uploadProgress
 }: ImageInputButtonProps) {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     return (
         <div className="w-full space-y-5">
-            <Image
-                src={backgroundImage}
-                alt="Preview"
-                className="max-h-[600px] object-cover rounded-2xl"
-            />
-            <div className="flex gap-3">
+            <div className="flex items-center gap-3">
                 <Button
                     variant="secondary"
                     className="transition-colors hover:bg-card hover:cursor-pointer"
@@ -103,6 +106,14 @@ function ImageInputButton({
                     Choose image
                     <PlusCircle size={20} />
                 </Button>
+                {isUploading && (
+                    <>
+                        <LoaderCircle className="size-5 animate-spin" />
+                        <span className="text-sm">
+                            {uploadProgress} %
+                        </span>
+                    </>
+                )}
             </div>
             <input
                 type="file"
@@ -114,10 +125,39 @@ function ImageInputButton({
 
                     if (images) {
                         onImageSelected(images);
-                        e.target.value = "";
+
                     }
                 }}
             />
         </div>
     );
+}
+
+interface UploadedImagePreviewProps {
+    images: ImageType[];
+}
+
+function UploadedImagePreview({
+    images
+}: UploadedImagePreviewProps) {
+
+    const image = images?.length
+        ? images[0].file
+        : undefined;
+
+    if (image) {
+
+        const src = URL.createObjectURL(image);
+        console.log("SRCCCC", src);
+
+        return (
+            <Image
+                src={src}
+                alt="Preview"
+                width={100}
+                height={100}
+                className="max-h-[600px] object-cover rounded-2xl size-fit"
+            />
+        );
+    }
 }

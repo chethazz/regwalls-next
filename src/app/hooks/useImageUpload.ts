@@ -2,8 +2,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useUploadThing } from "../lib/uploadthing";
 
-interface Image {
-    file: File | undefined;
+export interface Image {
+    file: File;
     imageId?: string;
     isUploading: boolean;
 }
@@ -15,8 +15,8 @@ export default function useImageUpload() {
 
     const { startUpload, isUploading } = useUploadThing("image", {
         onBeforeUploadBegin(files) {
-            
-            console.log("Images are this:")
+
+            console.log("Images are this:");
             const renamedImages = files.map(file => {
                 const extension = file.name.split(".").pop();
                 return new File(
@@ -36,21 +36,16 @@ export default function useImageUpload() {
         onClientUploadComplete(res) {
             const result = res[0];
 
-            setImages([
-                {
-                    file: new File([], result.name),
+            setImages(prev =>
+                prev.map(image => ({
+                    ...image,
                     imageId: result.serverData.id,
                     isUploading: false
-                }
-            ]);
+                }))
+            );
         },
         onUploadError(e) {
-            setImages([
-                {
-                    file: undefined,
-                    isUploading: false
-                }
-            ]);
+            setImages([]);
             toast.error(e.message);
         },
     });
