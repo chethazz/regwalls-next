@@ -42,11 +42,11 @@ model Session {
 model Image {
   id          String  @id @default(cuid())
   imageUrl    String
-  userId      String?
-  title       String?
+  userId      String
+  title       String
   description String?
   category    String?
-  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 

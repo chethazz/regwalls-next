@@ -1,7 +1,7 @@
 "use client";
 
 import useImageUpload, { Image as ImageType } from "@/app/hooks/useImageUpload";
-import { imageSchema, ImageValues } from "@/app/lib/validation";
+import { imageSchema, ImageValues, UploadValues } from "@/app/lib/validation";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { LoaderCircle, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { post } from "./actions";
 
 export default function Upload() {
 
@@ -32,6 +33,10 @@ export default function Upload() {
         removeImage,
     } = useImageUpload();
 
+    function onSubmit(input: UploadValues) {
+        post(input)
+    }
+
     return (
         <div className="p-5 space-y-5">
             <UploadedImagePreview
@@ -45,7 +50,7 @@ export default function Upload() {
                 disabled={false}
             />
             <Form {...form}>
-                <form className="space-y-3">
+                <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormField
                         control={form.control}
                         name="title"
