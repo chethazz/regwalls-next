@@ -60,10 +60,6 @@ export default function useImageUpload() {
 
     function removeImage() {
         setImages([]);
-    }
-
-    function reset() {
-        setImages([]);
         setUploadProgress(undefined);
     }
 
@@ -73,6 +69,5 @@ export default function useImageUpload() {
         isUploading,
         uploadProgress,
         removeImage,
-        reset
     };
 }

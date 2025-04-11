@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
@@ -29,7 +30,6 @@ export default function Upload() {
         isUploading,
         uploadProgress,
         removeImage,
-        reset: resetImageUpload
     } = useImageUpload();
 
     return (
@@ -73,6 +73,25 @@ export default function Upload() {
                             </FormItem>
                         )}
                     />
+                    <div className="flex justify-between">
+                        <Button
+                            type="submit"
+                            className="cursor-pointer"
+                        >
+                            Post
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            className="border cursor-pointer"
+                            onClick={() => {
+                                form.reset();
+                                removeImage();
+                            }}
+                        >
+                            Reset
+                        </Button>
+                    </div>
                 </form>
             </Form>
         </div>
@@ -153,7 +172,10 @@ function UploadedImagePreview({
                         alt="Preview"
                         width={100}
                         height={100}
-                        className="max-h-[600px] object-cover rounded-2xl size-fit"
+                        className={cn(
+                            "max-h-[600px] object-cover rounded-2xl size-fit",
+                            isUploading && "animate-pulse"
+                        )}
                     />
                     {isUploading && (
                         <div className="absolute flex p-1 rounded-full bottom-1 left-1 bg-secondary/60">
