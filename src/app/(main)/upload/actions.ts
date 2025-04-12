@@ -1,6 +1,6 @@
 "use server";
 
-import { UploadFormValues, uploadSchema, UploadValues } from "@/app/lib/validation";
+import { uploadSchema, UploadValues } from "@/app/lib/validation";
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 

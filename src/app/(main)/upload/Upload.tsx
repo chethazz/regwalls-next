@@ -61,7 +61,7 @@ export default function Upload() {
             />
             <Form {...form}>
                 <form className="space-y-3" onSubmit={form.handleSubmit((data) => {
-                    if (!images[0].imageId) {
+                    if (!images[0]?.imageId) {
                         toast.error("Please upload an image before submitting");
                         return;
                     }
