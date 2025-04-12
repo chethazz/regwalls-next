@@ -1,7 +1,7 @@
 "use client";
 
 import useImageUpload, { Image as ImageType } from "@/app/hooks/useImageUpload";
-import { uploadSchema, UploadValues } from "@/app/lib/validation";
+import { uploadFormSchema, UploadFormValues, UploadValues } from "@/app/lib/validation";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -20,8 +20,8 @@ export default function Upload() {
 
     const router = useRouter();
 
-    const form = useForm<UploadValues>({
-        resolver: zodResolver(uploadSchema),
+    const form = useForm<UploadFormValues>({
+        resolver: zodResolver(uploadFormSchema),
         defaultValues: {
             title: "",
             description: "",
@@ -37,10 +37,7 @@ export default function Upload() {
         removeImage,
     } = useImageUpload();
 
-    async function onSubmit(input: {
-        content: UploadValues,
-        imageId: string;
-    }) {
+    async function onSubmit(input: UploadValues) {
         try {
             await post(input);
             router.push("/");
@@ -69,10 +66,12 @@ export default function Upload() {
                         return;
                     }
 
-                    onSubmit({
-                        content: data,
+                    const input = {
+                        ...data,
                         imageId: images[0].imageId
-                    });
+                    };
+
+                    onSubmit(input);
                 })}>
                     <FormField
                         control={form.control}

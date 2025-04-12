@@ -21,17 +21,17 @@ export const logInSchema = z.object({
 
 export type LogInValues = z.infer<typeof logInSchema>;
 
-export const uploadSchema = z.object({
+export const uploadFormSchema = z.object({
     title: z.string().trim().min(1, "Title is required"),
     description: optionalString,
     category: optionalString
 });
 
-export type UploadValues = z.infer<typeof uploadSchema>;
+export type UploadFormValues = z.infer<typeof uploadFormSchema>;
 
-export const postUploadSchema = z.object({
-    ...uploadSchema.shape,
+export const uploadSchema = z.object({
+    ...uploadFormSchema.shape,
     imageId: z.string().trim().min(1)
 });
 
-export type PostUploadValues = z.infer<typeof postUploadSchema>;
+export type UploadValues = z.infer<typeof uploadSchema>;
