@@ -21,20 +21,17 @@ export const logInSchema = z.object({
 
 export type LogInValues = z.infer<typeof logInSchema>;
 
-export const imageSchema = z.object({
-    imageUrl: z.string().url("Invalid image URL"),
-    title: z.string().trim().min(1, "Title is required"),
-    description: optionalString,
-    category: optionalString
-});
-
-export type ImageValues = z.infer<typeof imageSchema>;
-
 export const uploadSchema = z.object({
-    imageUrl: z.string().max(1, "Cannot post multiple images at once"),
     title: z.string().trim().min(1, "Title is required"),
     description: optionalString,
     category: optionalString
 });
 
 export type UploadValues = z.infer<typeof uploadSchema>;
+
+export const postUploadSchema = z.object({
+    ...uploadSchema.shape,
+    imageId: z.string().trim().min(1)
+});
+
+export type PostUploadValues = z.infer<typeof postUploadSchema>;

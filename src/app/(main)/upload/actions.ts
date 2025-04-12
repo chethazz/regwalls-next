@@ -1,32 +1,37 @@
 "use server";
 
-import { uploadSchema } from "@/app/lib/validation";
+import { postUploadSchema, UploadValues } from "@/app/lib/validation";
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 
 export async function post(input: {
-    imageUrl: string;
-    title: string;
-    description?: string;
-    category?: string;
+    content: UploadValues;
+    imageId: string;
 }) {
     const { user } = await validateRequest();
 
     if (!user) throw new Error("Unauthorized");
 
-    const {
-        imageUrl,
-        title,
-        description,
-        category
-    } = uploadSchema.parse(input);
+    const { content, imageId } = input;
 
-    const newPost = await prisma.image.create({
+    const parsedData = postUploadSchema.parse({
+        ...content,
+        imageId
+    });
+
+    // const {
+    //     imageId,
+    //     title,
+    //     description,
+    //     category
+    // } = postUploadSchema.parse(input);
+
+    const newPost = await prisma.image.update({
+        where: { id: imageId },
         data: {
-            imageUrl,
-            title,
-            description,
-            category,
+            title: parsedData.title,
+            description: parsedData.description,
+            category: parsedData.category,
             userId: user.id
         }
     });

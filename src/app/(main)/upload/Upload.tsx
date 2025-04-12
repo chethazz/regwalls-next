@@ -1,7 +1,7 @@
 "use client";
 
 import useImageUpload, { Image as ImageType } from "@/app/hooks/useImageUpload";
-import { imageSchema, ImageValues, UploadValues } from "@/app/lib/validation";
+import { uploadSchema, UploadValues } from "@/app/lib/validation";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,14 +10,18 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { post } from "./actions";
 
 export default function Upload() {
 
-    const form = useForm<ImageValues>({
-        resolver: zodResolver(imageSchema),
+    const router = useRouter();
+
+    const form = useForm<UploadValues>({
+        resolver: zodResolver(uploadSchema),
         defaultValues: {
             title: "",
             description: "",
@@ -33,8 +37,17 @@ export default function Upload() {
         removeImage,
     } = useImageUpload();
 
-    function onSubmit(input: UploadValues) {
-        post(input)
+    async function onSubmit(input: {
+        content: UploadValues,
+        imageId: string;
+    }) {
+        try {
+            await post(input);
+            router.push("/");
+        } catch (error) {
+            toast.error("Something went wrong. Please try again");
+            console.error(error);
+        }
     }
 
     return (
@@ -43,14 +56,24 @@ export default function Upload() {
                 images={images}
                 removeImage={removeImage}
                 isUploading={isUploading}
-                uploadProgress={uploadProgress || 0}
+                uploadProgress={uploadProgress}
             />
             <ImageInputButton
                 onImageSelected={startUpload}
                 disabled={false}
             />
             <Form {...form}>
-                <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+                <form className="space-y-3" onSubmit={form.handleSubmit((data) => {
+                    if (!images[0].imageId) {
+                        toast.error("Please upload an image before submitting");
+                        return;
+                    }
+
+                    onSubmit({
+                        content: data,
+                        imageId: images[0].imageId
+                    });
+                })}>
                     <FormField
                         control={form.control}
                         name="title"
@@ -150,7 +173,7 @@ interface UploadedImagePreviewProps {
     images: ImageType[];
     removeImage: () => void;
     isUploading: boolean;
-    uploadProgress: number;
+    uploadProgress: number | undefined;
 }
 
 function UploadedImagePreview({
@@ -164,10 +187,13 @@ function UploadedImagePreview({
         ? images[0].file
         : undefined;
 
+    if (uploadProgress === 100) isUploading = false;
+
     if (image) {
 
         const src = URL.createObjectURL(image);
-        console.log("SRCCCC", src);
+        console.log("SRCCCC:", src);
+        console.log(isUploading);
 
         return (
             <div className="relative size-fit">

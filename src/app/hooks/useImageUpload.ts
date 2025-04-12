@@ -40,7 +40,7 @@ export default function useImageUpload() {
                 prev.map(image => ({
                     ...image,
                     imageId: result.serverData.id,
-                    isUploading: false
+                    isUploading: false,
                 }))
             );
         },
