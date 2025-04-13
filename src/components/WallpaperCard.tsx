@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { WallpaperData } from "@/app/lib/types";
 
 interface WallpaperCardProps {
@@ -27,6 +27,9 @@ export function WallpaperCard({
                         className="object-cover"
                     />
                 </CardContent>
+                <CardHeader>
+                    <CardTitle>{wallpaper.user?.displayName}</CardTitle>
+                </CardHeader>
             </Card>
         </Link>
     );
