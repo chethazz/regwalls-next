@@ -19,10 +19,7 @@ export const fileRouter = {
         .onUploadComplete(async ({ file }) => {
             const image = await prisma.image.create({
                 data: {
-                    imageUrl: file.ufsUrl.replace(
-                        "/f/",
-                        `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}`
-                    ),
+                    imageUrl: file.ufsUrl
                 }
             });
             return { id: image.id };

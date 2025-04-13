@@ -1,7 +1,9 @@
+import Wallpapers from "./Wallpapers";
+
 export default function Home() {
   return (
-    <main>
-      Wallpapers
+    <main className="flex justify-center">
+        <Wallpapers />
     </main>
   );
 }
