@@ -10,10 +10,15 @@ export const userDataSelect = {
 export const wallpaperDataInclude = {
     user: {
         select: userDataSelect
+    },
+    image: {
+        select: {
+            imageUrl: true
+        }
     }
-} satisfies Prisma.ImageInclude;
+} satisfies Prisma.WallpaperInclude;
 
-export type WallpaperData = Prisma.ImageGetPayload<{
+export type WallpaperData = Prisma.WallpaperGetPayload<{
     include: typeof wallpaperDataInclude;
 }>;
 

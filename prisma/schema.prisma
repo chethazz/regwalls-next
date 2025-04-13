@@ -14,16 +14,16 @@ datasource db {
 }
 
 model User {
-  id           String    @id
-  username     String    @unique
+  id           String      @id
+  username     String      @unique
   displayName  String
-  email        String?   @unique
+  email        String?     @unique
   passwordHash String?
-  googleId     String?   @unique
+  googleId     String?     @unique
   avatarUrl    String?
   bio          String?
   sessions     Session[]
-  images       Image[]
+  wallpapers   Wallpaper[]
 
   createdAt DateTime @default(now())
 
@@ -39,16 +39,29 @@ model Session {
   @@map("sessions")
 }
 
-model Image {
+model Wallpaper {
   id          String  @id @default(cuid())
-  imageUrl    String
-  userId      String?
-  title       String?
+  title       String
   description String?
   category    String?
-  user        User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  image Image?
 
   createdAt DateTime @default(now())
 
-  @@map("images")
+  @@map("wallpapers")
+}
+
+model Image {
+  id          String     @id @default(cuid())
+  imageUrl    String
+  wallpaperId String?    @unique
+  wallpaper   Wallpaper? @relation(fields: [wallpaperId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@map("image")
 }

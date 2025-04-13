@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
     try {
-        const wallpapers = await prisma.image.findMany({
+        const wallpapers = await prisma.wallpaper.findMany({
             include: wallpaperDataInclude
         });
 

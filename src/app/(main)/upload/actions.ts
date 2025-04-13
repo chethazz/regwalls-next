@@ -4,7 +4,7 @@ import { uploadSchema, UploadValues } from "@/app/lib/validation";
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 
-export async function post(input:UploadValues) {
+export async function post(input: UploadValues) {
     const { user } = await validateRequest();
 
     if (!user) throw new Error("Unauthorized");
@@ -15,17 +15,30 @@ export async function post(input:UploadValues) {
         title,
         description,
         category
-    } = uploadSchema.parse(input)
+    } = uploadSchema.parse(input);
 
-    const newPost = await prisma.image.update({
-        where: { id: imageId },
-        data: {
-            title,
-            description,
-            category,
-            userId: user.id
-        }
+    const newWallpaper = await prisma.$transaction(async (tx) => {
+        const newWallpaper = await tx.wallpaper.create({
+            data: {
+                title,
+                description,
+                category,
+                userId: user.id,
+                image: {
+                    connect: {
+                        id: imageId
+                    }
+                }
+            }
+        });
+
+        await tx.image.update({
+            where: { id: imageId },
+            data: {
+                wallpaperId: newWallpaper.id
+            }
+        });
     });
 
-    return newPost;
+    return newWallpaper;
 }
