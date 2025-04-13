@@ -17,7 +17,7 @@ export function WallpaperCard({
         <Link
             href={`/wallpaper/${wallpaper.id}`}
         >
-            <Card className="h-full pt-0 overflow-hidden">
+            <Card className="h-full gap-4 pt-0 pb-4 overflow-hidden">
                 <CardContent className="relative h-64 overflow-hidden">
                     <Image
                         src={wallpaper.image.imageUrl}
@@ -26,12 +26,12 @@ export function WallpaperCard({
                         className="object-cover"
                     />
                 </CardContent>
-                <CardHeader>
+                <CardHeader className="px-4">
                     <CardTitle>{wallpaper.title}</CardTitle>
                     {wallpaper.description && (
                         <CardDescription
                             dangerouslySetInnerHTML={{ __html: wallpaper.description }}
-                            className="line-clamp-3"
+                            className="line-clamp-2"
                         />
                     )}
                 </CardHeader>
