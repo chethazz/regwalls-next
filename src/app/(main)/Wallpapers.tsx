@@ -12,7 +12,7 @@ export default function Wallpapers() {
         data,
         status,
         isFetching,
-        error
+        isError
     } = useQuery({
         queryKey: ["wallpapers"],
         queryFn: kyInstance.get("http://localhost:3000/api/wallpapers").json<WallpapersPage>,
@@ -20,6 +20,12 @@ export default function Wallpapers() {
 
     if (isFetching) {
         return <WallpapersLoadingSkeleton />;
+    }
+
+    if (isError) {
+        return <p
+            className="text-center text-destructive"
+        >An error occcurred while loading wallpapers. Please try again</p>;
     }
 
     return (
