@@ -46,26 +46,28 @@ export default async function Page({
     if (!user) return notFound();
 
     return (
-        <main className="flex items-center justify-center">
-            <div className="block w-full py-5 basis-4 sm:flex max-w-7xl">
-                <div className="gap-5 p-10 md:flex bg-secondary rounded-2xl">
-                    {user.avatarUrl ? (
-                        <Image
-                            src={user.avatarUrl}
-                            alt="Profile picture"
-                            className="rounded-full"
-                            height={150}
-                            width={150}
-                        />
-                    ) : (
-                        <UserRound size={200} className="rounded-full bg-background" />
-                    )}
-                    <div className="my-auto">
+        <main className="flex items-center justify-center p-5">
+            <div className="block w-full gap-5 p-10 py-5 bg-secondary sm:flex max-w-7xl md:flex rounded-2xl">
+                {user.avatarUrl ? (
+                    <Image
+                        src={user.avatarUrl}
+                        alt="Profile picture"
+                        className="rounded-full"
+                        height={150}
+                        width={150}
+                    />
+                ) : (
+                    <UserRound size={200} className="rounded-full bg-background" />
+                )}
+                <div className="flex flex-col justify-between">
+                    <div>
                         <h1 className="text-2xl font-semibold">{user.displayName}</h1>
                         <h1 className="text-2xl text-muted-foreground">@{user.username}</h1>
-                        <p>Bio:</p>
                     </div>
+                    {user.bio && <p>{user.bio}</p>}
                 </div>
+
+
             </div>
         </main>
     );

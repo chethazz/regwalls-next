@@ -4,7 +4,8 @@ export const userDataSelect = {
     id: true,
     username: true,
     displayName: true,
-    avatarUrl: true
+    avatarUrl: true,
+    bio: true
 } satisfies Prisma.UserSelect;
 
 export const wallpaperDataInclude = {
