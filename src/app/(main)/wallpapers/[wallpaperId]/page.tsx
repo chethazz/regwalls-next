@@ -72,7 +72,7 @@ export default async function Page({
                         <h2 className="text-lg font-semibold">Creator:</h2>
                         <Link
                             className="flex w-1/2 gap-4 p-3 overflow-x-hidden bg-background rounded-2xl"
-                            href={`/user/${wallpaper.user.username}`}
+                            href={`/users/${wallpaper.user.username}`}
                             title="Open profile"
                         >
                             <UserRound size={50} />

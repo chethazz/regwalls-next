@@ -4,6 +4,7 @@ import { UserRound } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import UserWallpapers from "./UserWallpapers";
 
 interface PageProps {
     params: Promise<{ username: string; }>;
@@ -46,7 +47,7 @@ export default async function Page({
     if (!user) return notFound();
 
     return (
-        <main className="flex items-center justify-center p-5">
+        <main className="flex flex-col items-center justify-center gap-5 p-5">
             <div className="block w-full gap-5 p-10 py-5 bg-secondary sm:flex max-w-7xl md:flex rounded-2xl">
                 {user.avatarUrl ? (
                     <Image
@@ -66,9 +67,9 @@ export default async function Page({
                     </div>
                     {user.bio && <p>{user.bio}</p>}
                 </div>
-
-
             </div>
+            <h1 className="text-3xl font-bold text-center">Wallpapers by {user.displayName}</h1>
+            <UserWallpapers userId={user.id} />
         </main>
     );
 }

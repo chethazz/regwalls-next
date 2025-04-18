@@ -10,7 +10,6 @@ export default function Wallpapers() {
 
     const {
         data,
-        status,
         isFetching,
         isError
     } = useQuery({

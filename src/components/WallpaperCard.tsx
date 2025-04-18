@@ -15,7 +15,7 @@ export function WallpaperCard({
 
     return (
         <Link
-            href={`/wallpaper/${wallpaper.id}`}
+            href={`/wallpapers/${wallpaper.id}`}
         >
             <Card className="h-full gap-4 pt-0 pb-4 overflow-hidden">
                 <CardContent className="relative h-64 overflow-hidden">
