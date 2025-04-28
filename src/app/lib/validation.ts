@@ -35,3 +35,10 @@ export const uploadSchema = z.object({
 });
 
 export type UploadValues = z.infer<typeof uploadSchema>;
+
+export const updateUserProfileSchema = z.object({
+    displayName: z.string().trim().min(1, "Required"),
+    bio: z.string().max(1000, "Must be at most 1000 characters"),
+});
+
+export type UpdateUserProfileValues = z.infer<typeof updateUserProfileSchema>;

@@ -8,6 +8,10 @@ export const userDataSelect = {
     bio: true
 } satisfies Prisma.UserSelect;
 
+export type UserData = Prisma.UserGetPayload<{
+    select: typeof userDataSelect;
+}>;
+
 export const wallpaperDataInclude = {
     user: {
         select: userDataSelect
