@@ -3,6 +3,7 @@
 import { UserData } from "@/app/lib/types";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import EditProfileDialog from "./EditProfileDialog";
 
 interface EditProfileButtonProps {
     user: UserData;
@@ -19,6 +20,11 @@ export default function EditProfileButton({
             <Button onClick={() => setShowDialog(true)}>
                 Edit profile
             </Button>
+            <EditProfileDialog
+                user={user}
+                open={showDialog}
+                onOpenChange={setShowDialog}
+            />
         </>
     );
 }
