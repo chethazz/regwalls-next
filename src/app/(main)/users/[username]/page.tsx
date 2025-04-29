@@ -55,8 +55,8 @@ export default async function Page({
                         src={user.avatarUrl}
                         alt="Profile picture"
                         className="rounded-full"
-                        height={150}
-                        width={150}
+                        height={200}
+                        width={200}
                     />
                 ) : (
                     <UserRound size={200} className="rounded-full bg-background" />
