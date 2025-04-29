@@ -1,4 +1,5 @@
 import { UserData } from "@/app/lib/types";
+import { useUploadThing } from "@/app/lib/uploadthing";
 import { updateUserProfileSchema, UpdateUserProfileValues } from "@/app/lib/validation";
 import avatarPlaceholder from "@/assets/avatarPlaceholder.png";
 import CropImageDialog from "@/components/CropImageDialog";
@@ -29,6 +30,8 @@ export default function EditProfileDialog({
     onOpenChange
 }: EditProfileDialogProps) {
 
+    const { startUpload: startAvatarUpload } = useUploadThing("avatar");
+
     const updateUserProfileForm = useForm<UpdateUserProfileValues>({
         resolver: zodResolver(updateUserProfileSchema),
         defaultValues: {
@@ -40,13 +43,19 @@ export default function EditProfileDialog({
     const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
 
     async function onSubmit(values: UpdateUserProfileValues) {
-        //upload avatar
+        const newAvatarFile = croppedAvatar
+            ? new File([croppedAvatar], `avatar_${user.id}.webp`)
+            : undefined;
+
+        if (newAvatarFile) {
+            startAvatarUpload([newAvatarFile]);
+        }
 
         updateUserProfile(values);
     }
 
     return (
-        <Dialog open onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit profile</DialogTitle>
@@ -103,6 +112,7 @@ export default function EditProfileDialog({
                         <DialogFooter>
                             <Button
                                 type="submit"
+                                className="cursor-pointer"
                             >
                                 Save
                             </Button>

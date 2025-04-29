@@ -17,7 +17,10 @@ export default function EditProfileButton({
 
     return (
         <>
-            <Button onClick={() => setShowDialog(true)}>
+            <Button
+             onClick={() => setShowDialog(true)}
+             className="cursor-pointer"
+             >
                 Edit profile
             </Button>
             <EditProfileDialog
