@@ -1,6 +1,7 @@
 import { UserData } from "@/app/lib/types";
 import { updateUserProfileSchema, UpdateUserProfileValues } from "@/app/lib/validation";
 import avatarPlaceholder from "@/assets/avatarPlaceholder.png";
+import CropImageDialog from "@/components/CropImageDialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
@@ -11,9 +12,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import { useRef, useState } from "react";
+import 'react-advanced-cropper/dist/style.css';
 import { useForm } from "react-hook-form";
 import Resizer from "react-image-file-resizer";
-
 
 interface EditProfileDialogProps {
     user: UserData;
@@ -35,6 +36,8 @@ export default function EditProfileDialog({
         }
     });
 
+    const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
+
     return (
         <Dialog open onOpenChange={onOpenChange}>
             <DialogContent>
@@ -44,7 +47,10 @@ export default function EditProfileDialog({
                 <div className="space-y-2">
                     <Label>Profile picture</Label>
                     <AvatarInput
-                        src={user.avatarUrl || avatarPlaceholder}
+                        src={croppedAvatar
+                            ? URL.createObjectURL(croppedAvatar)
+                            : user.avatarUrl || avatarPlaceholder}
+                        onImageCropped={setCroppedAvatar}
                     />
                 </div>
 
@@ -102,13 +108,17 @@ export default function EditProfileDialog({
 
 interface AvatarInputProps {
     src: string | StaticImageData;
+    onImageCropped: (blob: Blob | null) => void;
 }
 
 function AvatarInput({
-    src
+    src,
+    onImageCropped
 }: AvatarInputProps) {
+
+    const [imageToCrop, setImageToCrop] = useState<File>();
+
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [selectedImage, setSelectedImage] = useState<string | StaticImageData>(src);
 
 
     function onImageSelected(image: File | undefined) {
@@ -121,8 +131,8 @@ function AvatarInput({
             "WEBP",
             100,
             0,
-            (uri) => { if (typeof uri === "string") setSelectedImage(uri); },
-            "base64"
+            (uri) => setImageToCrop(uri as File),
+            "file"
         );
     }
 
@@ -141,7 +151,7 @@ function AvatarInput({
                 className="relative block group"
             >
                 <Image
-                    src={selectedImage}
+                    src={src}
                     alt="Profile picture"
                     width={150}
                     height={150}
@@ -151,6 +161,19 @@ function AvatarInput({
                     <Camera size={24} />
                 </span>
             </button>
+            {imageToCrop && (
+                <CropImageDialog
+                    src={URL.createObjectURL(imageToCrop)}
+                    cropAspectRatio={1}
+                    onCropped={onImageCropped}
+                    onClose={() => {
+                        setImageToCrop(undefined);
+                        if (fileInputRef.current) {
+                            fileInputRef.current.value = "";
+                        }
+                    }}
+                />
+            )}
         </>
     );
 }
