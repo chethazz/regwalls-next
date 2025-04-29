@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import 'react-advanced-cropper/dist/style.css';
 import { useForm } from "react-hook-form";
 import Resizer from "react-image-file-resizer";
+import { updateUserProfile } from "./actions";
 
 interface EditProfileDialogProps {
     user: UserData;
@@ -38,6 +39,12 @@ export default function EditProfileDialog({
 
     const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
 
+    async function onSubmit(values: UpdateUserProfileValues) {
+        //upload avatar
+
+        updateUserProfile(values);
+    }
+
     return (
         <Dialog open onOpenChange={onOpenChange}>
             <DialogContent>
@@ -57,6 +64,7 @@ export default function EditProfileDialog({
                 <Form {...updateUserProfileForm}>
                     <form
                         className="space-y-3"
+                        onSubmit={updateUserProfileForm.handleSubmit(onSubmit)}
                     >
                         <FormField
                             control={updateUserProfileForm.control}
