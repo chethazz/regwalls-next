@@ -1,4 +1,5 @@
-import { Plus, UserRound } from "lucide-react";
+import UserButton from "@/components/UserButton";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -11,12 +12,12 @@ export default function Navbar() {
                 <div className="flex items-center justify-center gap-4 sm:ms-auto">
                     <Link
                         href="/upload"
-                        className="flex items-center text-sm justify-center gap-2 px-3 py-2 shadow-2xl bg-primary text-secondary rounded-2xl"
+                        className="flex items-center justify-center gap-2 px-3 py-2 text-sm shadow-2xl bg-primary text-secondary rounded-2xl"
                     >
                         Create
-                        <Plus className="size-4"/>
+                        <Plus className="size-4" />
                     </Link>
-                    <UserRound />
+                    <UserButton />
                 </div>
             </div>
         </header>
