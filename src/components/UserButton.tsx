@@ -41,7 +41,9 @@ export default function UserButton({
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuLabel>Logged in as @{user.username}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                    Logged in as <span className="text-muted-foreground">@{user.username}</span>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <Link href={`/users/${user.username}`}>
                     <DropdownMenuItem>
