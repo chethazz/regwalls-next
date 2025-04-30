@@ -52,6 +52,7 @@ export default function EditProfileDialog({
         }
 
         updateUserProfile(values);
+        onOpenChange(false);
     }
 
     return (
