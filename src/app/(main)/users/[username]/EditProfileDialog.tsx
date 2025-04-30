@@ -1,11 +1,11 @@
 import { UserData } from "@/app/lib/types";
 import { useUploadThing } from "@/app/lib/uploadthing";
-import { updateUserProfileSchema, UpdateUserProfileValues } from "@/app/lib/validation";
+import { updateUsernameSchema, UpdateUsernameValue, updateUserProfileSchema, UpdateUserProfileValues } from "@/app/lib/validation";
 import avatarPlaceholder from "@/assets/avatarPlaceholder.png";
 import CropImageDialog from "@/components/CropImageDialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +16,7 @@ import { useRef, useState } from "react";
 import 'react-advanced-cropper/dist/style.css';
 import { useForm } from "react-hook-form";
 import Resizer from "react-image-file-resizer";
-import { updateUserProfile } from "./actions";
+import { updateUsername, updateUserProfile } from "./actions";
 
 interface EditProfileDialogProps {
     user: UserData;
@@ -40,6 +40,13 @@ export default function EditProfileDialog({
         }
     });
 
+    const updateUserNameForm = useForm<UpdateUsernameValue>({
+        resolver: zodResolver(updateUsernameSchema),
+        defaultValues: {
+            username: user.username
+        }
+    });
+
     const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
 
     async function onSubmit(values: UpdateUserProfileValues) {
@@ -53,6 +60,10 @@ export default function EditProfileDialog({
 
         updateUserProfile(values);
         onOpenChange(false);
+    }
+
+    async function onUsernameSubmit(value: UpdateUsernameValue) {
+        updateUsername(value);
     }
 
     return (
@@ -70,6 +81,38 @@ export default function EditProfileDialog({
                         onImageCropped={setCroppedAvatar}
                     />
                 </div>
+
+                <Form {...updateUserNameForm}>
+                    <form
+                        onSubmit={updateUserNameForm.handleSubmit(onUsernameSubmit)}
+                        className="space-y-2"
+                    >
+                        <FormField
+                            control={updateUserNameForm.control}
+                            name="username"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Username</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Your username"
+                                            className="border-none bg-card"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <Button
+                            type="submit"
+                            className="cursor-pointer"
+                        >
+                            Change username
+                        </Button>
+                    </form>
+                </Form>
 
                 <Form {...updateUserProfileForm}>
                     <form
@@ -89,6 +132,7 @@ export default function EditProfileDialog({
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -106,6 +150,7 @@ export default function EditProfileDialog({
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
