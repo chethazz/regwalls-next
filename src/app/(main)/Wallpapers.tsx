@@ -28,7 +28,7 @@ export default function Wallpapers() {
     }
 
     return (
-        <div className="w-full py-5 max-w-7xl">
+        <div className="w-full max-w-7xl">
             <div className="flex flex-col grid-cols-2 gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
                 {data?.wallpapers.map(wallpaper => (
                     <WallpaperCard
