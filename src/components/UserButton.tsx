@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2, Monitor, Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import LoginOrCreate from "./LoginOrCreate";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import UserAvatar from "./UserAvatar";
 
@@ -32,28 +32,8 @@ export default function UserButton({
                         />
                     </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuLabel>
-                        Please Log in or create an account
-                    </DropdownMenuLabel>
 
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem asChild className="p-0 m-2">
-                        <Link href="/login">
-                            <Button variant="secondary" className="w-full cursor-pointer">
-                                Log in
-                            </Button>
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="p-0 m-2">
-                        <Link href="/signup">
-                            <Button className="w-full cursor-pointer">
-                                Sign up
-                            </Button>
-                        </Link>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
+                <LoginOrCreate />
             </DropdownMenu>
         );
     }
