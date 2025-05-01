@@ -9,7 +9,6 @@ export async function post(input: UploadValues) {
 
     if (!user) throw new Error("Unauthorized");
 
-
     const {
         imageId,
         title,
