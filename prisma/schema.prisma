@@ -14,16 +14,18 @@ datasource db {
 }
 
 model User {
-  id           String      @id
-  username     String      @unique
+  id           String  @id
+  username     String  @unique
   displayName  String
-  email        String?     @unique
+  email        String? @unique
   passwordHash String?
-  googleId     String?     @unique
+  googleId     String? @unique
   avatarUrl    String?
   bio          String?
-  sessions     Session[]
-  wallpapers   Wallpaper[]
+
+  sessions   Session[]
+  wallpapers Wallpaper[]
+  favorites  Favorite[]
 
   createdAt DateTime @default(now())
 
@@ -48,7 +50,8 @@ model Wallpaper {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  image Image?
+  image     Image?
+  favorites Favorite[]
 
   createdAt DateTime @default(now())
 
@@ -64,4 +67,17 @@ model Image {
   createdAt DateTime @default(now())
 
   @@map("image")
+}
+
+model Favorite {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallpaperId String
+  wallpaper   Wallpaper @relation(fields: [wallpaperId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, wallpaperId])
+  @@map("favorites")
 }
