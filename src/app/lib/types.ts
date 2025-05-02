@@ -12,7 +12,7 @@ export type UserData = Prisma.UserGetPayload<{
     select: typeof userDataSelect;
 }>;
 
-export function getWallpaperDataInclude(loggedInUserId: string) {
+export function getUserWallpaperDataInclude(loggedInUserId: string) {
     return {
         user: {
             select: userDataSelect
@@ -33,8 +33,8 @@ export function getWallpaperDataInclude(loggedInUserId: string) {
     } satisfies Prisma.WallpaperInclude;
 }
 
-export type LoggedInWallpaperData = Prisma.WallpaperGetPayload<{
-    include: ReturnType<typeof getWallpaperDataInclude>;
+export type UserWallpaperData = Prisma.WallpaperGetPayload<{
+    include: ReturnType<typeof getUserWallpaperDataInclude>;
 }>;
 
 export const wallpaperDataInclude = {
@@ -53,7 +53,7 @@ export type WallpaperData = Prisma.WallpaperGetPayload<{
 }>;
 
 export interface WallpapersPage {
-    wallpapers: WallpaperData[];
+    wallpapers: WallpaperData[] | UserWallpaperData[];
 }
 
 export interface FavoriteInfo {
