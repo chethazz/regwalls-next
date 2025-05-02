@@ -1,4 +1,5 @@
 import { userDataSelect } from "@/app/lib/types";
+import { validateRequest } from "@/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/lib/prisma";
 import { UserRound } from "lucide-react";
@@ -42,6 +43,8 @@ export default async function Page({
     params
 }: PageProps) {
 
+    const { user: loggedInUser } = await validateRequest();
+
     const { username } = await params;
 
     const user = await getUser(username);
@@ -62,18 +65,20 @@ export default async function Page({
                 ) : (
                     <UserRound size={200} className="rounded-full bg-background" />
                 )}
-                <div className="space-y-3 md:w-[60%] w-full">
+                <div className="w-full space-y-3">
                     <div>
                         <h1 className="text-2xl font-semibold">{user.displayName}</h1>
                         <h1 className="text-2xl text-muted-foreground">@{user.username}</h1>
                     </div>
                     {user.bio && <p className="text-muted-foreground">{user.bio}</p>}
                 </div>
-                <div className="flex flex-col justify-end">
-                    <EditProfileButton
-                        user={user}
-                    />
-                </div>
+                {loggedInUser && user.id === loggedInUser.id && (
+                    <div className="flex flex-col justify-end">
+                        <EditProfileButton
+                            user={user}
+                        />
+                    </div>
+                )}
             </div>
             <Tabs defaultValue="wallpapers" className="w-full max-w-7xl">
                 <TabsList>
