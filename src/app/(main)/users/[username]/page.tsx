@@ -1,4 +1,5 @@
 import { userDataSelect } from "@/app/lib/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/lib/prisma";
 import { UserRound } from "lucide-react";
 import Image from "next/image";
@@ -74,8 +75,19 @@ export default async function Page({
                     />
                 </div>
             </div>
-            <h1 className="text-3xl font-bold text-center">Wallpapers by {user.displayName}</h1>
-            <UserWallpapers userId={user.id} />
+            <Tabs defaultValue="wallpapers" className="w-full max-w-7xl">
+                <TabsList>
+                    <TabsTrigger value="wallpapers">Wallpapers</TabsTrigger>
+                    <TabsTrigger value="favorites">Favorites</TabsTrigger>
+                </TabsList>
+                <TabsContent value="wallpapers" className="space-y-5">
+                    <h1 className="text-3xl font-bold text-center">Wallpapers by {user.displayName}</h1>
+                    <UserWallpapers userId={user.id} />
+                </TabsContent>
+                <TabsContent value="favorites">
+                    Favorites
+                </TabsContent>
+            </Tabs>
         </main>
     );
 }
