@@ -67,3 +67,30 @@ export async function POST(
         return Response.json({ error: "Internal server error" }, { status: 500 });
     }
 }
+
+export async function DELETE(
+    req: Request,
+    { params }: { params: Promise<{ wallpaperId: string; }>; }
+) {
+    try {
+        const { wallpaperId } = await params;
+
+        const { user: loggedInUser } = await validateRequest();
+
+        if (!loggedInUser) {
+            return Response.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        await prisma.favorite.deleteMany({
+            where: {
+                userId: loggedInUser.id,
+                wallpaperId
+            }
+        });
+
+        return new Response();
+    } catch (error) {
+        console.error(error);
+        return Response.json({ error: "Internal server error" }, { status: 500 });
+    }
+}
