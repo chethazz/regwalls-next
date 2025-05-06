@@ -1,4 +1,5 @@
 import { wallpaperDataInclude } from "@/app/lib/types";
+import UserButton from "@/components/UserButton";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import prisma from "@/lib/prisma";
 import { UserRound } from "lucide-react";
@@ -75,7 +76,7 @@ export default async function Page({
                             href={`/users/${wallpaper.user.username}`}
                             title="Open profile"
                         >
-                            <UserRound size={50} />
+                            <UserButton size={50} />
                             <div>
                                 <p className="font-semibold">{wallpaper.user.displayName}</p>
                                 <p className="text-muted-foreground">@{wallpaper.user.username}</p>
