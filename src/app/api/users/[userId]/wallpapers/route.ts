@@ -1,4 +1,5 @@
-import { wallpaperDataInclude, WallpapersPage } from "@/app/lib/types";
+import { getUserWallpaperDataInclude, wallpaperDataInclude, WallpapersPage } from "@/app/lib/types";
+import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
@@ -11,6 +12,21 @@ export async function GET(
 
         if (!userId) {
             throw new Error("User Id is required");
+        }
+
+        const { user: loggedInUser } = await validateRequest();
+
+        if (loggedInUser) {
+            const wallpapers = await prisma.wallpaper.findMany({
+                where: { userId },
+                include: getUserWallpaperDataInclude(loggedInUser.id)
+            });
+
+            const data: WallpapersPage = {
+                wallpapers
+            };
+
+            return Response.json(data);
         }
 
         const wallpapers = await prisma.wallpaper.findMany({
