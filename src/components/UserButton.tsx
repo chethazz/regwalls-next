@@ -11,10 +11,12 @@ import UserAvatar from "./UserAvatar";
 
 interface UserButtonProps {
     className?: string;
+    size?: number;
 }
 
 export default function UserButton({
-    className
+    className,
+    size = 30
 }: UserButtonProps) {
 
     const { user } = useSession();
@@ -28,7 +30,7 @@ export default function UserButton({
                     <button className={cn("flex-none rounded-full cursor-pointer", className)}>
                         <UserAvatar
                             avatarUrl={null}
-                            size={40}
+                            size={size}
                         />
                     </button>
                 </DropdownMenuTrigger>
@@ -44,7 +46,7 @@ export default function UserButton({
                 <button className={cn("flex-none rounded-full cursor-pointer", className)}>
                     <UserAvatar
                         avatarUrl={user.avatarUrl}
-                        size={40}
+                        size={size}
                     />
                 </button>
             </DropdownMenuTrigger>
