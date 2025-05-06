@@ -19,7 +19,7 @@ export default function Favorites({
         isError
     } = useQuery({
         queryKey: ["favorites"],
-        queryFn: kyInstance.get(`http://localhost:3000/api/users/${userId}/favorites`).json<WallpapersPage>,
+        queryFn: () => kyInstance.get(`http://localhost:3000/api/users/${userId}/favorites`).json<WallpapersPage>(),
     });
 
     if (isFetching) {

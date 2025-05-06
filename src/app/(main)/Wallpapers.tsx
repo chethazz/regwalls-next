@@ -14,7 +14,7 @@ export default function Wallpapers() {
         isError
     } = useQuery({
         queryKey: ["wallpapers"],
-        queryFn: kyInstance.get("http://localhost:3000/api/wallpapers").json<WallpapersPage>,
+        queryFn: () => kyInstance.get("http://localhost:3000/api/wallpapers").json<WallpapersPage>(),
     });
 
     if (isFetching) {
