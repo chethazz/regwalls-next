@@ -1,4 +1,5 @@
-import { UserWallpaperData, WallpaperData, wallpaperDataInclude } from "@/app/lib/types";
+import { getUserWallpaperDataInclude, UserWallpaperData, WallpaperData, wallpaperDataInclude } from "@/app/lib/types";
+import { validateRequest } from "@/auth";
 import FavoriteButton from "@/components/FavoriteButton";
 import UserButton from "@/components/UserButton";
 import { WallpaperCard } from "@/components/WallpaperCard";
@@ -14,6 +15,21 @@ interface PageProps {
 }
 
 const getWallpaper = cache(async (wallpaperId: string) => {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (loggedInUser) {
+        const wallpaper = await prisma.wallpaper.findUnique({
+            where: {
+                id: wallpaperId
+            },
+            include: getUserWallpaperDataInclude(loggedInUser.id)
+        });
+
+        if (!wallpaper) notFound();
+
+        return wallpaper;
+    }
+
     const wallpaper = await prisma.wallpaper.findUnique({
         where: {
             id: wallpaperId
@@ -59,7 +75,7 @@ export default async function Page({
 
     return (
         <main className="flex items-center justify-center p-5">
-            <div className="block w-full gap-4 sm:flex max-w-7xl space-y-5">
+            <div className="block w-full gap-4 space-y-5 sm:flex max-w-7xl">
                 <div className="p-4 space-y-3 h-fit basis-5/7 bg-secondary rounded-2xl">
                     <h1 className="text-4xl font-bold">{wallpaper.title}</h1>
                     <Image
@@ -74,8 +90,8 @@ export default async function Page({
                         <p className="text-muted-foreground">{wallpaper.description}</p>
                     </div>
                     <h2 className="text-lg font-semibold">Creator:</h2>
-                    <div className="flex justify-between w-full gap-4">
-                        <div className="w-1/2">
+                    <div className="flex flex-col justify-between w-full gap-4 md:flex-row">
+                        <div className="md:w-1/2">
 
                             <Link
                                 className="flex gap-4 p-3 overflow-x-hidden bg-background rounded-2xl"
@@ -98,8 +114,8 @@ export default async function Page({
                                     )
                                     : false
                             }}
-                            className="w-1/2 bg-card rounded-2xl"
-                            size={35}
+                            className="w-full p-5 md:w-1/2 bg-card rounded-2xl"
+                            size={32}
                         >
                             {isUserWallpaperData(wallpaper) &&
                                 (wallpaper.favorites.some(favorite => favorite.userId === wallpaper.user.id))
