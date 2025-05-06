@@ -59,7 +59,7 @@ export default async function Page({
 
     return (
         <main className="flex items-center justify-center p-5">
-            <div className="block w-full gap-4 sm:flex max-w-7xl">
+            <div className="block w-full gap-4 sm:flex max-w-7xl space-y-5">
                 <div className="p-4 space-y-3 h-fit basis-5/7 bg-secondary rounded-2xl">
                     <h1 className="text-4xl font-bold">{wallpaper.title}</h1>
                     <Image
