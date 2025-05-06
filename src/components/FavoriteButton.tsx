@@ -14,13 +14,15 @@ interface FavoriteButtonProps {
     initialState: FavoriteInfo;
     className?: string;
     size?: number;
+    children?: React.ReactNode;
 }
 
 export default function FavoriteButton({
     wallpaperId,
     initialState,
     className,
-    size = 24
+    size = 24,
+    children
 }: FavoriteButtonProps) {
 
     const { user } = useSession();
@@ -37,11 +39,12 @@ export default function FavoriteButton({
         return (
             <div className={className}>
                 <DropdownMenu>
-                    <DropdownMenuTrigger className="cursor-pointer">
+                    <DropdownMenuTrigger className="flex items-center justify-center gap-2 cursor-pointer">
                         <Heart
                             className="transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400"
                             size={size}
                         />
+                        {children}
                     </DropdownMenuTrigger>
                     <LoginOrCreate />
                 </DropdownMenu>
@@ -59,7 +62,7 @@ export default function FavoriteButton({
 
     return (
         <button className={cn(
-            "cursor-pointer",
+            "cursor-pointer flex justify-center items-center gap-2",
             className
         )}
             onClick={(e) => {
@@ -73,6 +76,7 @@ export default function FavoriteButton({
             )}
                 size={size}
             />
+            {children}
         </button>
     );
 }
