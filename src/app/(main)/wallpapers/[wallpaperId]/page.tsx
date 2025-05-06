@@ -2,7 +2,6 @@ import { wallpaperDataInclude } from "@/app/lib/types";
 import UserButton from "@/components/UserButton";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import prisma from "@/lib/prisma";
-import { UserRound } from "lucide-react";
 import { unstable_cache } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";

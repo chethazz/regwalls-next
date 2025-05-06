@@ -54,7 +54,7 @@ export default function FavoriteButton({
 
     return (
         <button className={cn(
-            "cursor-pointer transition-transform hover:scale-110 hover:animate-pulse",
+            "cursor-pointer",
             className
         )}
             onClick={(e) => {
