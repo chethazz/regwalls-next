@@ -135,6 +135,19 @@ export default async function Page({
 
 const getSuggestedWallpapers = unstable_cache(
     async () => {
+
+        const { user: loggedInUser } = await validateRequest();
+
+        if (loggedInUser) {
+            const result = await prisma.wallpaper.findMany({
+                include: getUserWallpaperDataInclude(loggedInUser.id),
+                take: 5,
+                orderBy: { createdAt: "desc" }
+            });
+
+            return result;
+        }
+
         const result = await prisma.wallpaper.findMany({
             include: wallpaperDataInclude,
             take: 5
