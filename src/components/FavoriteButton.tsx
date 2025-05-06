@@ -13,12 +13,14 @@ interface FavoriteButtonProps {
     wallpaperId: string;
     initialState: FavoriteInfo;
     className?: string;
+    size?: number;
 }
 
 export default function FavoriteButton({
     wallpaperId,
     initialState,
-    className
+    className,
+    size = 24
 }: FavoriteButtonProps) {
 
     const { user } = useSession();
@@ -36,7 +38,10 @@ export default function FavoriteButton({
             <div className={className}>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="cursor-pointer">
-                        <Heart className="transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400" />
+                        <Heart
+                            className="transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400"
+                            size={size}
+                        />
                     </DropdownMenuTrigger>
                     <LoginOrCreate />
                 </DropdownMenu>
@@ -66,6 +71,7 @@ export default function FavoriteButton({
             <Heart className={cn("transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400",
                 data.isFavoritedByUser && "fill-red-600 text-red-600"
             )}
+                size={size}
             />
         </button>
     );
