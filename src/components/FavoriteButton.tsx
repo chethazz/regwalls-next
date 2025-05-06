@@ -41,7 +41,7 @@ export default function FavoriteButton({
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center justify-center gap-2 cursor-pointer">
                         <Heart
-                            className="transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400"
+                            className="transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400 group-hover:scale-110 group-hover:animate-pulse group-hover:fill-red-400 group-hover:text-red-400"
                             size={size}
                         />
                         {children}
@@ -62,7 +62,7 @@ export default function FavoriteButton({
 
     return (
         <button className={cn(
-            "cursor-pointer flex justify-center items-center gap-2",
+            "cursor-pointer flex justify-center items-center gap-2 group",
             className
         )}
             onClick={(e) => {
@@ -71,7 +71,7 @@ export default function FavoriteButton({
                 onFavoriteClick();
             }}
         >
-            <Heart className={cn("transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400",
+            <Heart className={cn("transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400 group-hover:scale-110 group-hover:animate-pulse group-hover:fill-red-400 group-hover:text-red-400",
                 data.isFavoritedByUser && "fill-red-600 text-red-600"
             )}
                 size={size}
