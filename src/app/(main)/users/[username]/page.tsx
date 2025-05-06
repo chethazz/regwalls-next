@@ -7,6 +7,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import EditProfileButton from "./EditProfileButton";
+import Favorites from "./Favorites";
 import UserWallpapers from "./UserWallpapers";
 
 interface PageProps {
@@ -89,8 +90,9 @@ export default async function Page({
                     <h1 className="text-3xl font-bold text-center">Wallpapers by {user.displayName}</h1>
                     <UserWallpapers userId={user.id} />
                 </TabsContent>
-                <TabsContent value="favorites">
-                    Favorites
+                <TabsContent value="favorites" className="space-y-5">
+                    <h1 className="text-3xl font-bold text-center">{user.displayName}&apos;s Favorites</h1>
+                    <Favorites userId={user.id} />
                 </TabsContent>
             </Tabs>
         </main>
