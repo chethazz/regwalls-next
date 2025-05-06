@@ -1,4 +1,5 @@
-import { wallpaperDataInclude } from "@/app/lib/types";
+import { UserWallpaperData, WallpaperData, wallpaperDataInclude } from "@/app/lib/types";
+import FavoriteButton from "@/components/FavoriteButton";
 import UserButton from "@/components/UserButton";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import prisma from "@/lib/prisma";
@@ -52,6 +53,10 @@ export default async function Page({
         );
     }
 
+    function isUserWallpaperData(wallpaper: WallpaperData | UserWallpaperData): wallpaper is UserWallpaperData {
+        return 'favorites' in wallpaper;
+    }
+
     return (
         <main className="flex items-center justify-center p-5">
             <div className="block w-full gap-4 sm:flex max-w-7xl">
@@ -68,19 +73,40 @@ export default async function Page({
                         <h2 className="text-lg font-semibold">Description</h2>
                         <p className="text-muted-foreground">{wallpaper.description}</p>
                     </div>
-                    <div>
-                        <h2 className="text-lg font-semibold">Creator:</h2>
-                        <Link
-                            className="flex w-1/2 gap-4 p-3 overflow-x-hidden bg-background rounded-2xl"
-                            href={`/users/${wallpaper.user.username}`}
-                            title="Open profile"
+                    <h2 className="text-lg font-semibold">Creator:</h2>
+                    <div className="flex justify-between w-full gap-4">
+                        <div className="w-1/2">
+
+                            <Link
+                                className="flex gap-4 p-3 overflow-x-hidden bg-background rounded-2xl"
+                                href={`/users/${wallpaper.user.username}`}
+                                title="Open profile"
+                            >
+                                <UserButton size={50} />
+                                <div>
+                                    <p className="font-semibold">{wallpaper.user.displayName}</p>
+                                    <p className="text-muted-foreground">@{wallpaper.user.username}</p>
+                                </div>
+                            </Link>
+                        </div>
+                        <FavoriteButton
+                            wallpaperId={wallpaperId}
+                            initialState={{
+                                isFavoritedByUser: isUserWallpaperData(wallpaper)
+                                    ? wallpaper.favorites.some(
+                                        favorite => favorite.userId === wallpaper.user.id
+                                    )
+                                    : false
+                            }}
+                            className="w-1/2 bg-card rounded-2xl"
+                            size={35}
                         >
-                            <UserButton size={50} />
-                            <div>
-                                <p className="font-semibold">{wallpaper.user.displayName}</p>
-                                <p className="text-muted-foreground">@{wallpaper.user.username}</p>
-                            </div>
-                        </Link>
+                            {isUserWallpaperData(wallpaper) &&
+                                (wallpaper.favorites.some(favorite => favorite.userId === wallpaper.user.id))
+                                ? <p>Remove from favorites</p>
+                                : <p>Add to favorites</p>
+                            }
+                        </FavoriteButton>
                     </div>
                 </div>
                 <div className="p-4 basis-2/7 bg-secondary rounded-2xl">
