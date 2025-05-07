@@ -12,7 +12,7 @@ export default function Navbar() {
                 </Link>
                 <div className="flex items-center justify-center gap-4 sm:ms-auto">
                     <CreateButton />
-                    <UserButton />
+                    <UserButton size={36} />
                 </div>
             </div>
         </header>
