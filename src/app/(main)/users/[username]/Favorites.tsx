@@ -1,9 +1,11 @@
 "use client";
 
 import { WallpapersPage } from "@/app/lib/types";
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
 import WallpapersLoadingSkeleton from "../../WallpapersLoadingSkeleton";
 
 interface FavoritesProps {
@@ -16,7 +18,10 @@ export default function Favorites({
     const {
         data,
         isFetching,
-        isError
+        isError,
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage
     } = useInfiniteQuery({
         queryKey: ["favorites"],
         queryFn: ({ pageParam }) => kyInstance.get(
@@ -42,7 +47,10 @@ export default function Favorites({
     }
 
     return (
-        <div className="w-full gap-4 max-w-7xl">
+        <InfiniteScrollContainer
+            onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
+            className="w-full gap-4 max-w-7xl"
+        >
             <div className="flex flex-col grid-cols-2 gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
                 {
                     wallpapers.map(wallpaper => (
@@ -53,6 +61,7 @@ export default function Favorites({
                     ))
                 }
             </div>
-        </div>
+            {isFetchingNextPage && <LoaderCircle className="mx-auto my-3 animate-spin" />}
+        </InfiniteScrollContainer>
     );
 }
