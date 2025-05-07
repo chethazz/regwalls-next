@@ -3,7 +3,7 @@
 import { WallpapersPage } from "@/app/lib/types";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import kyInstance from "@/lib/ky";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import WallpapersLoadingSkeleton from "../../WallpapersLoadingSkeleton";
 
 interface FavoritesProps {
@@ -17,10 +17,17 @@ export default function Favorites({
         data,
         isFetching,
         isError
-    } = useQuery({
+    } = useInfiniteQuery({
         queryKey: ["favorites"],
-        queryFn: () => kyInstance.get(`http://localhost:3000/api/users/${userId}/favorites`).json<WallpapersPage>(),
+        queryFn: ({ pageParam }) => kyInstance.get(
+            `http://localhost:3000/api/users/${userId}/favorites`,
+            pageParam ? { searchParams: { cursor: pageParam } } : {}
+        ).json<WallpapersPage>(),
+        initialPageParam: null as string | null,
+        getNextPageParam: (lastPage) => lastPage.nextCursor
     });
+
+    const wallpapers = data?.pages.flatMap(page => page.wallpapers) || [];
 
     if (isFetching) {
         return <WallpapersLoadingSkeleton />;
@@ -38,7 +45,7 @@ export default function Favorites({
         <div className="w-full gap-4 max-w-7xl">
             <div className="flex flex-col grid-cols-2 gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
                 {
-                    data?.wallpapers.map(wallpaper => (
+                    wallpapers.map(wallpaper => (
                         <WallpaperCard
                             key={wallpaper.id}
                             wallpaper={wallpaper}

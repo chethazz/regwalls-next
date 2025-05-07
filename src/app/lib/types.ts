@@ -54,6 +54,7 @@ export type WallpaperData = Prisma.WallpaperGetPayload<{
 
 export interface WallpapersPage {
     wallpapers: WallpaperData[] | UserWallpaperData[];
+    nextCursor: string | null;
 }
 
 export interface FavoriteInfo {

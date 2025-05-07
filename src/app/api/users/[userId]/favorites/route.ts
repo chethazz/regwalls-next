@@ -1,12 +1,17 @@
 import { getUserWallpaperDataInclude, wallpaperDataInclude, WallpapersPage } from "@/app/lib/types";
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
+import { NextRequest } from "next/server";
 
 export async function GET(
-    req: Request,
+    req: NextRequest,
     { params }: { params: Promise<{ userId: string; }>; }
 ) {
     try {
+        const cursor = req.nextUrl.searchParams.get("cursor");
+
+        const pageSize = 6;
+
         const { userId } = await params;
 
         if (!userId) throw new Error("User Id is required");
@@ -18,13 +23,19 @@ export async function GET(
                 where: { userId },
                 include: {
                     wallpaper: {
-                        include: getUserWallpaperDataInclude(loggedInUser.id)
+                        include: getUserWallpaperDataInclude(loggedInUser.id),
                     }
-                }
+                },
+                orderBy: { createdAt: "desc" },
+                take: pageSize + 1,
+                cursor: cursor ? { id: cursor } : undefined
             });
 
+            const nextCursor = favorites.length > pageSize ? favorites[pageSize].id : null;
+
             const data: WallpapersPage = {
-                wallpapers: favorites.map(fav => fav.wallpaper)
+                wallpapers: favorites.slice(0, pageSize).map(fav => fav.wallpaper),
+                nextCursor
             };
 
             return Response.json(data);
@@ -38,10 +49,15 @@ export async function GET(
                 }
             },
             orderBy: { createdAt: "desc" },
+            take: pageSize + 1,
+            cursor: cursor ? { id: cursor } : undefined
         });
 
+        const nextCursor = favorites.length > pageSize ? favorites[pageSize].id : null;
+
         const data: WallpapersPage = {
-            wallpapers: favorites.map(fav => fav.wallpaper)
+            wallpapers: favorites.slice(0, pageSize).map(fav => fav.wallpaper),
+            nextCursor
         };
 
         return Response.json(data);

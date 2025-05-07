@@ -8,6 +8,10 @@ export async function GET(
     { params }: { params: Promise<{ userId: string; }>; }
 ) {
     try {
+        const cursor = req.nextUrl.searchParams.get("cursor") || null;
+
+        const pageSize = 6;
+
         const { userId } = await params;
 
         if (!userId) {
@@ -19,11 +23,16 @@ export async function GET(
         if (loggedInUser) {
             const wallpapers = await prisma.wallpaper.findMany({
                 where: { userId },
-                include: getUserWallpaperDataInclude(loggedInUser.id)
+                include: getUserWallpaperDataInclude(loggedInUser.id),
+                take: pageSize + 1,
+                cursor: cursor ? { id: cursor } : undefined
             });
 
+            const nextCursor = wallpapers.length > pageSize ? wallpapers[pageSize].id : null;
+
             const data: WallpapersPage = {
-                wallpapers
+                wallpapers: wallpapers.slice(0, pageSize),
+                nextCursor
             };
 
             return Response.json(data);
@@ -33,10 +42,15 @@ export async function GET(
             where: { userId },
             include: wallpaperDataInclude,
             orderBy: { createdAt: "desc" },
+            take: pageSize + 1,
+            cursor: cursor ? { id: cursor } : undefined
         });
 
+        const nextCursor = wallpapers.length > pageSize ? wallpapers[pageSize].id : null;
+
         const data: WallpapersPage = {
-            wallpapers
+            wallpapers: wallpapers.slice(0, pageSize),
+            nextCursor
         };
 
         return Response.json(data);
