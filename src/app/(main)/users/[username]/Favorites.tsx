@@ -18,10 +18,10 @@ export default function Favorites({
     const {
         data,
         isFetching,
-        isError,
         hasNextPage,
         isFetchingNextPage,
-        fetchNextPage
+        fetchNextPage,
+        status
     } = useInfiniteQuery({
         queryKey: ["favorites"],
         queryFn: ({ pageParam }) => kyInstance.get(
@@ -34,15 +34,13 @@ export default function Favorites({
 
     const wallpapers = data?.pages.flatMap(page => page.wallpapers) || [];
 
-    if (isFetching) {
+    if (status === "pending") {
         return <WallpapersLoadingSkeleton />;
     }
 
-    if (isError) {
-        return <p
-            className="text-center text-destructive"
-        >
-            An error occcurred while loading favorites. Please try again
+    if (status === "error") {
+        return <p className="text-center text-destructive">
+            An error occcurred while loading favorites. Please try again.
         </p>;
     }
 

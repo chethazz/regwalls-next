@@ -13,10 +13,10 @@ export default function Wallpapers() {
     const {
         data,
         isFetching,
-        isError,
         hasNextPage,
         isFetchingNextPage,
         fetchNextPage,
+        status
     } = useInfiniteQuery({
         queryKey: ["wallpapers"],
         queryFn: ({ pageParam }) => kyInstance.get(
@@ -29,13 +29,13 @@ export default function Wallpapers() {
 
     const wallpapers = data?.pages.flatMap(page => page.wallpapers) || [];
 
-    if (isFetching) {
+    if (status === "pending") {
         return <WallpapersLoadingSkeleton />;
     }
 
-    if (isError) {
+    if (status === "error") {
         return <p className="text-center text-destructive">
-            An error occcurred while loading wallpapers. Please try again
+            An error occcurred while loading wallpapers. Please try again.
         </p>;
     }
 
