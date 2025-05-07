@@ -6,16 +6,16 @@ import kyInstance from "@/lib/ky";
 import { cn } from "@/lib/utils";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
+import { toast } from "sonner";
 import LoginOrCreate from "./LoginOrCreate";
 import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { toast } from "sonner";
 
 interface FavoriteButtonProps {
     wallpaperId: string;
     initialState: FavoriteInfo;
     className?: string;
     size?: number;
-    children?: React.ReactNode;
+    showLabel?: boolean;
 }
 
 export default function FavoriteButton({
@@ -23,7 +23,7 @@ export default function FavoriteButton({
     initialState,
     className,
     size = 24,
-    children
+    showLabel = false
 }: FavoriteButtonProps) {
 
     const { user } = useSession();
@@ -74,7 +74,14 @@ export default function FavoriteButton({
                             className="transition-all hover:scale-110 hover:animate-pulse hover:fill-red-400 hover:text-red-400 group-hover:scale-110 group-hover:animate-pulse group-hover:fill-red-400 group-hover:text-red-400"
                             size={size}
                         />
-                        {children}
+                        {showLabel && (
+                            <p>
+                                {data.isFavoritedByUser
+                                    ? "Remove from favorites"
+                                    : "Add to favorites"
+                                }
+                            </p>
+                        )}
                     </DropdownMenuTrigger>
                     <LoginOrCreate />
                 </DropdownMenu>
@@ -98,7 +105,14 @@ export default function FavoriteButton({
             )}
                 size={size}
             />
-            {children}
+            {showLabel && (
+                <p>
+                    {data.isFavoritedByUser
+                        ? "Remove from favorites"
+                        : "Add to favorites"
+                    }
+                </p>
+            )}
         </button>
     );
 }

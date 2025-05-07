@@ -116,13 +116,8 @@ export default async function Page({
                             }}
                             className="w-full p-5 md:w-1/2 bg-card rounded-2xl"
                             size={32}
-                        >
-                            {isUserWallpaperData(wallpaper) &&
-                                (wallpaper.favorites.some(favorite => favorite.userId === wallpaper.user.id))
-                                ? <p>Remove from favorites</p>
-                                : <p>Add to favorites</p>
-                            }
-                        </FavoriteButton>
+                            showLabel
+                        />
                     </div>
                 </div>
                 <div className="p-4 basis-2/7 bg-secondary rounded-2xl">
