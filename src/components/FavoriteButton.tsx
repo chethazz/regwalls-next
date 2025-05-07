@@ -30,7 +30,7 @@ export default function FavoriteButton({
 
     const queryClient = useQueryClient();
 
-    const queryKey: QueryKey = ["bookmark-info", wallpaperId];
+    const queryKey: QueryKey = ["favorite-info", wallpaperId];
 
     const { data } = useQuery({
         queryKey: queryKey,
