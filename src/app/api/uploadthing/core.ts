@@ -54,6 +54,8 @@ export const fileRouter = {
                     avatarUrl: newAvatarUrl
                 }
             });
+
+            return { avatarUrl: newAvatarUrl };
         })
 } satisfies FileRouter;
 
