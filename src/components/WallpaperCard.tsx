@@ -1,8 +1,10 @@
+import { useSession } from "@/app/(main)/SessionProvider";
 import { UserWallpaperData, WallpaperData } from "@/app/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import FavoriteButton from "./FavoriteButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import WallpaperCardMoreButton from "./WallpaperCardMoreButton";
 
 interface WallpaperCardProps {
     wallpaper: WallpaperData | UserWallpaperData;
@@ -11,6 +13,8 @@ interface WallpaperCardProps {
 export function WallpaperCard({
     wallpaper,
 }: WallpaperCardProps) {
+
+    const { user: loggedInUser } = useSession();
 
     if (!wallpaper.image) return null;
 
@@ -30,6 +34,12 @@ export function WallpaperCard({
                         fill
                         className="object-cover"
                     />
+                    {loggedInUser && wallpaper.userId === loggedInUser.id && (
+                        <WallpaperCardMoreButton
+                            wallpaper={wallpaper}
+                            className="absolute top-3 right-3"
+                        />
+                    )}
                     <FavoriteButton
                         wallpaperId={wallpaper.id}
                         initialState={{
