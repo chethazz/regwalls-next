@@ -1,5 +1,4 @@
 import { UserData } from "@/app/lib/types";
-import { useUploadThing } from "@/app/lib/uploadthing";
 import { updateUsernameSchema, UpdateUsernameValue, updateUserProfileSchema, UpdateUserProfileValues } from "@/app/lib/validation";
 import avatarPlaceholder from "@/assets/avatarPlaceholder.png";
 import CropImageDialog from "@/components/CropImageDialog";
@@ -16,7 +15,8 @@ import { useRef, useState } from "react";
 import 'react-advanced-cropper/dist/style.css';
 import { useForm } from "react-hook-form";
 import Resizer from "react-image-file-resizer";
-import { updateUsername, updateUserProfile } from "./actions";
+import { updateUsername } from "./actions";
+import { useUpdateProfileMutation } from "./mutations";
 
 interface EditProfileDialogProps {
     user: UserData;
@@ -30,7 +30,7 @@ export default function EditProfileDialog({
     onOpenChange
 }: EditProfileDialogProps) {
 
-    const { startUpload: startAvatarUpload } = useUploadThing("avatar");
+    const mutation = useUpdateProfileMutation();
 
     const updateUserProfileForm = useForm<UpdateUserProfileValues>({
         resolver: zodResolver(updateUserProfileSchema),
@@ -54,12 +54,18 @@ export default function EditProfileDialog({
             ? new File([croppedAvatar], `avatar_${user.id}.webp`)
             : undefined;
 
-        if (newAvatarFile) {
-            startAvatarUpload([newAvatarFile]);
-        }
-
-        updateUserProfile(values);
-        onOpenChange(false);
+        mutation.mutate(
+            {
+                values,
+                avatar: newAvatarFile
+            },
+            {
+                onSuccess: () => {
+                    setCroppedAvatar(null);
+                    onOpenChange(false);
+                }
+            }
+        );
     }
 
     async function onUsernameSubmit(value: UpdateUsernameValue) {

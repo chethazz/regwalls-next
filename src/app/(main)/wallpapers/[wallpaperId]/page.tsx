@@ -1,6 +1,7 @@
 import { getUserWallpaperDataInclude, UserWallpaperData, WallpaperData, wallpaperDataInclude } from "@/app/lib/types";
 import { validateRequest } from "@/auth";
 import FavoriteButton from "@/components/FavoriteButton";
+import { Button } from "@/components/ui/button";
 import UserButton from "@/components/UserButton";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import prisma from "@/lib/prisma";
@@ -119,6 +120,9 @@ export default async function Page({
                             showLabel
                         />
                     </div>
+                    <Button className="w-full cursor-pointer">
+                        Download
+                    </Button>
                 </div>
                 <div className="p-4 basis-2/7 bg-secondary rounded-2xl">
                     <SuggestedWallpapers />
