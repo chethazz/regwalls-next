@@ -1,8 +1,11 @@
+"use client"
+
 import { WallpaperData } from "@/app/lib/types";
 import { Ellipsis, Trash } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import DeleteWallpaperDialog from "./DeleteWallpaperDialog";
 
 interface WallpaperCardMoreButtonProps {
     wallpaper: WallpaperData;
@@ -32,6 +35,11 @@ export default function WallpaperCardMoreButton({
                         </span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
+                <DeleteWallpaperDialog
+                wallpaper={wallpaper}
+                open={showDeleteDialog}
+                onClose={() => setShowDeleteDialog(false)}
+                />
             </DropdownMenu>
         </div>
     );
