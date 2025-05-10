@@ -1,8 +1,9 @@
 "use client";
 
+import { logout } from "@/app/(auth)/actions";
 import { useSession } from "@/app/(main)/SessionProvider";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Monitor, Moon, Sun, UserRound } from "lucide-react";
+import { CheckCircle2, LogOut, Monitor, Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import LoginOrCreate from "./LoginOrCreate";
@@ -57,7 +58,7 @@ export default function UserButton({
                 <DropdownMenuSeparator />
                 <Link href={`/users/${user.username}`}>
                     <DropdownMenuItem>
-                        <UserRound className="mr-2 size-4" />
+                        <UserRound className="mr-2 size-4 text-primary" />
                         Profile
                     </DropdownMenuItem>
                 </Link>
@@ -95,6 +96,13 @@ export default function UserButton({
                         </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                 </DropdownMenuSub>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem onClick={() => logout()}>
+                    <LogOut className="mr-2 size-4 text-primary" />
+                    Log out
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
