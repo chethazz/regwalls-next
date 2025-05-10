@@ -6,7 +6,7 @@ import { WallpaperCard } from "@/components/WallpaperCard";
 import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
-import WallpapersLoadingSkeleton from "../../WallpapersLoadingSkeleton";
+import WallpapersLoadingSkeleton from "../../wallpapers/WallpapersLoadingSkeleton";
 
 interface UserWallpapersProps {
     userId: string;
