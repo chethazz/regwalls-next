@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useSession } from "@/app/(main)/SessionProvider";
 import { UserWallpaperData, WallpaperData } from "@/app/lib/types";

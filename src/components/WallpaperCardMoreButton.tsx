@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { WallpaperData } from "@/app/lib/types";
 import { Ellipsis, Trash } from "lucide-react";
@@ -22,13 +22,20 @@ export default function WallpaperCardMoreButton({
     return (
         <div>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="ghost" className={className}>
+                <DropdownMenuTrigger asChild >
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        className={className}
+                        >
                         <Ellipsis className="size-5 cursor-pointer" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
+                    <DropdownMenuItem onClick={(e) => {
+                        e.stopPropagation();
+                        setShowDeleteDialog(true)
+                    }}>
                         <span className="flex items-center gap-3 text-destructive">
                             <Trash className="size-4" />
                             Delete
@@ -36,9 +43,9 @@ export default function WallpaperCardMoreButton({
                     </DropdownMenuItem>
                 </DropdownMenuContent>
                 <DeleteWallpaperDialog
-                wallpaper={wallpaper}
-                open={showDeleteDialog}
-                onClose={() => setShowDeleteDialog(false)}
+                    wallpaper={wallpaper}
+                    open={showDeleteDialog}
+                    onClose={() => setShowDeleteDialog(false)}
                 />
             </DropdownMenu>
         </div>
