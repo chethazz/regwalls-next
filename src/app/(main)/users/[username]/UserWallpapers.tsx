@@ -23,7 +23,7 @@ export default function UserWallpapers({
         fetchNextPage,
         status
     } = useInfiniteQuery({
-        queryKey: ["user-wallpapers"],
+        queryKey: ["wallpapers", "user-wallpapers"],
         queryFn: ({ pageParam }) => kyInstance.get(
             `http://localhost:3000/api/users/${userId}/wallpapers`,
             pageParam ? { searchParams: { cursor: pageParam } } : {}

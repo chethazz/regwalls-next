@@ -1,11 +1,11 @@
 "use client";
 
+import { WallpapersPage } from "@/app/lib/types";
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import kyInstance from "@/lib/ky";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
-import { WallpapersPage } from "../lib/types";
 import WallpapersLoadingSkeleton from "./WallpapersLoadingSkeleton";
 
 export default function Wallpapers() {
@@ -18,7 +18,7 @@ export default function Wallpapers() {
         fetchNextPage,
         status
     } = useInfiniteQuery({
-        queryKey: ["wallpapers"],
+        queryKey: ["wallpapers", "main-wallpapers"],
         queryFn: ({ pageParam }) => kyInstance.get(
             "http://localhost:3000/api/wallpapers",
             pageParam ? { searchParams: { cursor: pageParam } } : {}
