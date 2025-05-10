@@ -120,8 +120,10 @@ export default async function Page({
                             showLabel
                         />
                     </div>
-                    <Button className="w-full cursor-pointer">
-                        Download
+                    <Button className="w-full cursor-pointer" asChild>
+                        <a href={`http://localhost:3000/api/download/${wallpaperId}`}>
+                            Download
+                        </a>
                     </Button>
                 </div>
                 <div className="p-4 basis-2/7 bg-secondary rounded-2xl">
