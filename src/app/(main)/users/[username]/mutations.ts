@@ -1,15 +1,12 @@
 import { useUploadThing } from "@/app/lib/uploadthing";
 import { UpdateUserProfileValues } from "@/app/lib/validation";
-import { QueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { updateUserProfile } from "./actions";
-import { WallpapersPage } from "@/app/lib/types";
 import { toast } from "sonner";
+import { updateUserProfile } from "./actions";
 
 export function useUpdateProfileMutation() {
     const router = useRouter();
-
-    const queryClient = useQueryClient();
 
     const { startUpload: startAvatarUpload } = useUploadThing("avatar");
 
