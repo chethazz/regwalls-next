@@ -100,13 +100,8 @@ export default function Upload() {
                             </FormItem>
                         )}
                     />
-                    <div className="flex justify-between">
-                        <Button
-                            type="submit"
-                            className="cursor-pointer"
-                        >
-                            Post
-                        </Button>
+                    <div className="flex justify-end space-x-3">
+
                         <Button
                             type="button"
                             variant="secondary"
@@ -117,6 +112,12 @@ export default function Upload() {
                             }}
                         >
                             Reset
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="cursor-pointer"
+                        >
+                            Post
                         </Button>
                     </div>
                 </form>
