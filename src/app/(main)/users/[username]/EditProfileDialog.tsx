@@ -2,7 +2,7 @@ import { UserData } from "@/app/lib/types";
 import { updateUsernameSchema, UpdateUsernameValue, updateUserProfileSchema, UpdateUserProfileValues } from "@/app/lib/validation";
 import avatarPlaceholder from "@/assets/avatarPlaceholder.png";
 import CropImageDialog from "@/components/CropImageDialog";
-import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/LoadingButton";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import 'react-advanced-cropper/dist/style.css';
 import { useForm } from "react-hook-form";
 import Resizer from "react-image-file-resizer";
@@ -31,6 +31,11 @@ export default function EditProfileDialog({
 }: EditProfileDialogProps) {
 
     const mutation = useUpdateProfileMutation();
+
+    const [isPending, startTransition] = useTransition();
+
+    const [error, setError] = useState<string>();
+
 
     const updateUserProfileForm = useForm<UpdateUserProfileValues>({
         resolver: zodResolver(updateUserProfileSchema),
@@ -69,7 +74,11 @@ export default function EditProfileDialog({
     }
 
     async function onUsernameSubmit(value: UpdateUsernameValue) {
-        updateUsername(value);
+        setError(undefined);
+        startTransition(async () => {
+            const { error } = await updateUsername(value);
+            if (error) setError(error);
+        });
     }
 
     return (
@@ -89,6 +98,7 @@ export default function EditProfileDialog({
                 </div>
 
                 <Form {...updateUserNameForm}>
+                    {error && <p className="text-center text-destructive">{error}</p>}
                     <form
                         onSubmit={updateUserNameForm.handleSubmit(onUsernameSubmit)}
                         className="space-y-2"
@@ -111,12 +121,13 @@ export default function EditProfileDialog({
                             )}
                         />
 
-                        <Button
+                        <LoadingButton
                             type="submit"
                             className="cursor-pointer"
+                            loading={isPending}
                         >
                             Change username
-                        </Button>
+                        </LoadingButton>
                     </form>
                 </Form>
 
@@ -162,12 +173,13 @@ export default function EditProfileDialog({
                         />
 
                         <DialogFooter>
-                            <Button
+                            <LoadingButton
                                 type="submit"
                                 className="cursor-pointer"
+                                loading={mutation.isPending}
                             >
                                 Save
-                            </Button>
+                            </LoadingButton>
                         </DialogFooter>
                     </form>
                 </Form>
