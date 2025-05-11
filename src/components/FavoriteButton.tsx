@@ -34,7 +34,7 @@ export default function FavoriteButton({
 
     const { data } = useQuery({
         queryKey: queryKey,
-        queryFn: () => kyInstance.get(`http://localhost:3000/api/wallpapers/${wallpaperId}/favorite`).json<FavoriteInfo>(),
+        queryFn: () => kyInstance.get(`/api/wallpapers/${wallpaperId}/favorite`).json<FavoriteInfo>(),
         initialData: initialState,
         staleTime: Infinity,
         enabled: !!user
@@ -43,8 +43,8 @@ export default function FavoriteButton({
     const { mutate } = useMutation({
         mutationFn: () =>
             data.isFavoritedByUser
-                ? kyInstance.delete(`http://localhost:3000/api/wallpapers/${wallpaperId}/favorite`)
-                : kyInstance.post(`http://localhost:3000/api/wallpapers/${wallpaperId}/favorite`),
+                ? kyInstance.delete(`/api/wallpapers/${wallpaperId}/favorite`)
+                : kyInstance.post(`/api/wallpapers/${wallpaperId}/favorite`),
         onMutate: async () => {
             toast.message(`${data.isFavoritedByUser ? "Removed from favorites" : "Added to favorites"}`);
 

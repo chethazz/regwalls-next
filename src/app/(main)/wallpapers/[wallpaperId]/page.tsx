@@ -121,7 +121,7 @@ export default async function Page({
                         />
                     </div>
                     <Button className="w-full cursor-pointer" asChild>
-                        <a href={`http://localhost:3000/api/download/${wallpaperId}`}>
+                        <a href={`/api/download/${wallpaperId}`}>
                             Download
                         </a>
                     </Button>

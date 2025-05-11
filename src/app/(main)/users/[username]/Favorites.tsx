@@ -25,7 +25,7 @@ export default function Favorites({
     } = useInfiniteQuery({
         queryKey: ["wallpapers", "favorites"],
         queryFn: ({ pageParam }) => kyInstance.get(
-            `http://localhost:3000/api/users/${userId}/favorites`,
+            `/api/users/${userId}/favorites`,
             pageParam ? { searchParams: { cursor: pageParam } } : {}
         ).json<WallpapersPage>(),
         initialPageParam: null as string | null,
