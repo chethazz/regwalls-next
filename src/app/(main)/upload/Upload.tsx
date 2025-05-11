@@ -2,6 +2,7 @@
 
 import useImageUpload, { Image as ImageType } from "@/app/hooks/useImageUpload";
 import { uploadFormSchema, UploadFormValues, UploadValues } from "@/app/lib/validation";
+import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -113,12 +114,14 @@ export default function Upload() {
                         >
                             Reset
                         </Button>
-                        <Button
+                        <LoadingButton
                             type="submit"
                             className="cursor-pointer"
+                            disabled={form.formState.isSubmitting || isUploading}
+                            loading={form.formState.isSubmitting}
                         >
                             Post
-                        </Button>
+                        </LoadingButton>
                     </div>
                 </form>
             </Form>
