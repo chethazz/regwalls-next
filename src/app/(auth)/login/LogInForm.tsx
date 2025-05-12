@@ -1,17 +1,19 @@
 "use client";
 
 import { logInSchema, LogInValues } from "@/app/lib/validation";
-import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/LoadingButton";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { logIn } from "./actions";
 
 export default function LogInForm() {
 
     const [error, setError] = useState<string>();
+
+    const [isPending, startTransition] = useTransition();
 
     const form = useForm<LogInValues>({
         resolver: zodResolver(logInSchema),
@@ -23,8 +25,10 @@ export default function LogInForm() {
 
     async function onSubmit(values: LogInValues) {
         setError(undefined);
-        const { error } = await logIn(values);
-        if (error) setError(error);
+        startTransition(async () => {
+            const { error } = await logIn(values);
+            if (error) setError(error);
+        });
     }
 
     return (
@@ -72,12 +76,13 @@ export default function LogInForm() {
                     )}
                 />
 
-                <Button
+                <LoadingButton
                     type="submit"
-                    className="w-full"
+                    className="w-full cursor-pointer"
+                    loading={isPending}
                 >
                     Log In
-                </Button>
+                </LoadingButton>
             </form>
         </Form>
     );

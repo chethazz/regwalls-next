@@ -1,17 +1,19 @@
 "use client";
 
 import { signUpSchema, SignUpValues } from "@/app/lib/validation";
-import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/LoadingButton";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { signUp } from "./actions";
 
 export default function SignUpForm() {
 
     const [error, setError] = useState<string>();
+
+    const [isPending, startTransition] = useTransition();
 
     const form = useForm<SignUpValues>({
         resolver: zodResolver(signUpSchema),
@@ -23,10 +25,11 @@ export default function SignUpForm() {
     });
 
     async function onSubmit(values: SignUpValues) {
-        const { error } = await signUp(values);
-        if (error) {
-            setError(error);
-        }
+        setError(undefined);
+        startTransition(async () => {
+            const { error } = await signUp(values);
+            if (error) setError(error);
+        });
     }
 
     return (
@@ -93,12 +96,13 @@ export default function SignUpForm() {
                     )}
                 />
 
-                <Button
-                    className="w-full"
+                <LoadingButton
                     type="submit"
+                    className="w-full cursor-pointer"
+                    loading={isPending}
                 >
                     Create account
-                </Button>
+                </LoadingButton>
             </form>
         </Form>
     );
