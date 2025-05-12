@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { post } from "./actions";
@@ -20,6 +20,10 @@ import { post } from "./actions";
 export default function Upload() {
 
     const router = useRouter();
+
+    const [error, setError] = useState<string>();
+
+    const [isPending, startTransition] = useTransition();
 
     const form = useForm<UploadFormValues>({
         resolver: zodResolver(uploadFormSchema),
@@ -39,13 +43,15 @@ export default function Upload() {
     } = useImageUpload();
 
     async function onSubmit(input: UploadValues) {
-        try {
+        startTransition(async () => {
+            try {
             await post(input);
             router.push("/");
         } catch (error) {
             toast.error("Something went wrong. Please try again");
             console.error(error);
         }
+        })
     }
 
     return (
@@ -117,8 +123,8 @@ export default function Upload() {
                         <LoadingButton
                             type="submit"
                             className="cursor-pointer"
-                            disabled={form.formState.isSubmitting || isUploading}
-                            loading={form.formState.isSubmitting}
+                            disabled={isPending || isUploading}
+                            loading={isPending}
                         >
                             Post
                         </LoadingButton>
