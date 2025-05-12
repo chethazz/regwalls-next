@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { post } from "./actions";
@@ -20,8 +20,6 @@ import { post } from "./actions";
 export default function Upload() {
 
     const router = useRouter();
-
-    const [error, setError] = useState<string>();
 
     const [isPending, startTransition] = useTransition();
 
