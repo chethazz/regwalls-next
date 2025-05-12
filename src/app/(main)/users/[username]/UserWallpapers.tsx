@@ -44,6 +44,12 @@ export default function UserWallpapers({
         </p>;
     }
 
+    if (status === "success" && !wallpapers.length && !hasNextPage) {
+        return <p className="text-center text-muted-foreground">
+            This user has&apos;t posted anything
+        </p>;
+    }
+
     return (
         <InfiniteScrollContainer
             onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}

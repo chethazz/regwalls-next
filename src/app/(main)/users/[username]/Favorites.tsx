@@ -44,6 +44,12 @@ export default function Favorites({
         </p>;
     }
 
+    if (status === "success" && !wallpapers.length && !hasNextPage) {
+        return <p className="text-center text-muted-foreground">
+            Empty
+        </p>;
+    }
+
     return (
         <InfiniteScrollContainer
             onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}

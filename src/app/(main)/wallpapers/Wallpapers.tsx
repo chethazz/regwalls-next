@@ -39,6 +39,12 @@ export default function Wallpapers() {
         </p>;
     }
 
+    if (status === "success" && !wallpapers.length && !hasNextPage) {
+        return <p className="text-center text-muted-foreground">
+            No one has posted yet
+        </p>;
+    }
+
     return (
         <InfiniteScrollContainer
             onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
