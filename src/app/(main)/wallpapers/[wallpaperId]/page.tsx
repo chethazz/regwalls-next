@@ -2,7 +2,7 @@ import { getUserWallpaperDataInclude, UserWallpaperData, WallpaperData, wallpape
 import { validateRequest } from "@/auth";
 import FavoriteButton from "@/components/FavoriteButton";
 import { Button } from "@/components/ui/button";
-import UserButton from "@/components/UserButton";
+import UserAvatar from "@/components/UserAvatar";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import prisma from "@/lib/prisma";
 import { unstable_cache } from "next/cache";
@@ -99,7 +99,7 @@ export default async function Page({
                                 href={`/users/${wallpaper.user.username}`}
                                 title="Open profile"
                             >
-                                <UserButton size={50} />
+                                <UserAvatar avatarUrl={wallpaper.user.avatarUrl} size={50} />
                                 <div>
                                     <p className="font-semibold">{wallpaper.user.displayName}</p>
                                     <p className="text-muted-foreground">@{wallpaper.user.username}</p>
